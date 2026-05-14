@@ -49,9 +49,9 @@ class TransactionModel {
       txnNumber: map['txn_number'],
       date: DateTime.parse(map['date']),
       customerId: map['customer_id'],
-      totalAmount: map['total_amount'],
-      paidAmount: map['paid_amount'] ?? 0.0,
-      balanceAmount: map['balance_amount'] ?? 0.0,
+      totalAmount: double.tryParse(map['total_amount']?.toString() ?? '0') ?? 0.0,
+      paidAmount: double.tryParse(map['paid_amount']?.toString() ?? '0') ?? 0.0,
+      balanceAmount: double.tryParse(map['balance_amount']?.toString() ?? '0') ?? 0.0,
       status: map['status'] ?? 'PAID',
       notes: map['notes'],
     );
@@ -95,9 +95,9 @@ class TransactionItem {
       txnId: map['txn_id'],
       itemId: map['item_id'],
       itemName: map['item_name'],
-      qty: map['qty'],
-      rate: map['rate'],
-      amount: map['amount'],
+      qty: double.tryParse(map['qty']?.toString() ?? '0') ?? 0.0,
+      rate: double.tryParse(map['rate']?.toString() ?? '0') ?? 0.0,
+      amount: double.tryParse(map['amount']?.toString() ?? '0') ?? 0.0,
     );
   }
 }

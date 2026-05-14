@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -31,7 +32,7 @@ class PdfService {
     final terms = prefs.getString(AppConstants.keyTermsConditions) ?? '';
 
     pw.MemoryImage? logoImage;
-    if (logoPath != null && File(logoPath).existsSync()) {
+    if (!kIsWeb && logoPath != null && File(logoPath).existsSync()) {
       logoImage = pw.MemoryImage(File(logoPath).readAsBytesSync());
     }
 

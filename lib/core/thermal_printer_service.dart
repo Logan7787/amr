@@ -1,26 +1,31 @@
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import '../models/transaction_model.dart';
 import '../models/customer.dart';
 
 class ThermalPrinterService {
-  final BlueThermalPrinter _bluetooth = BlueThermalPrinter.instance;
+  BlueThermalPrinter? get _bluetooth => kIsWeb ? null : BlueThermalPrinter.instance;
 
   Future<List<BluetoothDevice>> getDevices() async {
-    return await _bluetooth.getBondedDevices();
+    if (kIsWeb) return [];
+    return await _bluetooth!.getBondedDevices();
   }
 
   Future<void> connect(BluetoothDevice device) async {
-    await _bluetooth.connect(device);
+    if (kIsWeb) return;
+    await _bluetooth!.connect(device);
   }
 
   Future<void> disconnect() async {
-    await _bluetooth.disconnect();
+    if (kIsWeb) return;
+    await _bluetooth!.disconnect();
   }
 
   Future<bool?> isConnected() async {
-    return await _bluetooth.isConnected;
+    if (kIsWeb) return false;
+    return await _bluetooth!.isConnected;
   }
 
   Future<void> printReceipt(
@@ -30,7 +35,8 @@ class ThermalPrinterService {
     String address,
     String mobile,
   ) async {
-    bool? connected = await _bluetooth.isConnected;
+    if (kIsWeb) return;
+    bool? connected = await _bluetooth?.isConnected;
     if (connected == true) {
       final profile = await CapabilityProfile.load();
       final generator = Generator(PaperSize.mm58, profile);

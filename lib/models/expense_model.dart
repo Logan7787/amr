@@ -27,7 +27,7 @@ class ExpenseModel {
     return ExpenseModel(
       id: map['id'],
       category: map['category'],
-      amount: map['amount'] ?? 0.0,
+      amount: double.tryParse(map['amount']?.toString() ?? '0') ?? 0.0,
       date: DateTime.parse(map['date']),
       notes: map['notes'],
     );

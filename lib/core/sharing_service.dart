@@ -1,5 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../models/transaction_model.dart';
@@ -49,6 +50,11 @@ class SharingService {
     String filename,
     String text,
   ) async {
+    if (kIsWeb) {
+      // On Web, we can't easily use share_plus for files in this way.
+      // Usually you would trigger a download.
+      return;
+    }
     final tempDir = await getTemporaryDirectory();
     final file = await File('${tempDir.path}/$filename').create();
     await file.writeAsBytes(bytes);

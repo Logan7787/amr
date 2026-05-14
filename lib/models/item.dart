@@ -35,9 +35,15 @@ class Item {
       nameTa: map['name_ta'],
       nameEn: map['name_en'],
       unit: map['unit'],
-      rate: map['rate'],
-      stockQuantity: map['stock_quantity'] ?? 0.0,
-      lowStockThreshold: map['low_stock_threshold'] ?? 0.0,
+      rate: double.tryParse(map['rate']?.toString() ?? '0') ?? 0.0,
+      stockQuantity: double.tryParse(map['stock_quantity']?.toString() ?? '0') ?? 0.0,
+      lowStockThreshold: double.tryParse(map['low_stock_threshold']?.toString() ?? '0') ?? 0.0,
     );
-  }
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Item && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

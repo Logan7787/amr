@@ -31,5 +31,11 @@ class Customer {
       address: map['address'],
       gstNo: map['gst_no'],
     );
-  }
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Customer && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

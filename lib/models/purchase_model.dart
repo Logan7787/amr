@@ -40,9 +40,9 @@ class PurchaseModel {
       supplierId: map['supplier_id'],
       txnNumber: map['txn_number'],
       date: DateTime.parse(map['date']),
-      totalAmount: map['total_amount'] ?? 0.0,
-      paidAmount: map['paid_amount'] ?? 0.0,
-      balanceAmount: map['balance_amount'] ?? 0.0,
+      totalAmount: double.tryParse(map['total_amount']?.toString() ?? '0') ?? 0.0,
+      paidAmount: double.tryParse(map['paid_amount']?.toString() ?? '0') ?? 0.0,
+      balanceAmount: double.tryParse(map['balance_amount']?.toString() ?? '0') ?? 0.0,
       notes: map['notes'],
     );
   }
@@ -85,9 +85,9 @@ class PurchaseItem {
       purchaseId: map['purchase_id'],
       itemId: map['item_id'],
       itemName: map['item_name'],
-      qty: map['qty'] ?? 0.0,
-      rate: map['rate'] ?? 0.0,
-      amount: map['amount'] ?? 0.0,
+      qty: double.tryParse(map['qty']?.toString() ?? '0') ?? 0.0,
+      rate: double.tryParse(map['rate']?.toString() ?? '0') ?? 0.0,
+      amount: double.tryParse(map['amount']?.toString() ?? '0') ?? 0.0,
     );
   }
 }

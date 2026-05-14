@@ -22,7 +22,7 @@ class DataRepository {
   Future<int> insertCustomer(Customer customer) async {
     if (kIsWeb) {
       final response = await Supabase.instance.client.from('customers').insert(customer.toMap()).select().single();
-      int id = response['id'];
+      int id = int.tryParse(response['id']?.toString() ?? '0') ?? 0;
       customer.id = id;
       return id;
     }
@@ -72,7 +72,7 @@ class DataRepository {
   Future<int> insertItem(Item item) async {
     if (kIsWeb) {
       final response = await Supabase.instance.client.from('items').insert(item.toMap()).select().single();
-      int id = response['id'];
+      int id = int.tryParse(response['id']?.toString() ?? '0') ?? 0;
       item.id = id;
       return id;
     }
@@ -122,7 +122,7 @@ class DataRepository {
   Future<int> createTransaction(TransactionModel txn) async {
     if (kIsWeb) {
       final response = await Supabase.instance.client.from('transactions').insert(txn.toMap()).select().single();
-      int txnId = response['id'];
+      int txnId = int.tryParse(response['id']?.toString() ?? '0') ?? 0;
       
       if (txn.items != null) {
         for (var item in txn.items!) {
@@ -131,8 +131,8 @@ class DataRepository {
           
           if (txn.type == 'INVOICE' && item.itemId != null) {
             final itemData = await Supabase.instance.client.from('items').select('stock_quantity').eq('id', item.itemId as Object).single();
-            num currentStock = itemData['stock_quantity'] ?? 0;
-            await Supabase.instance.client.from('items').update({'stock_quantity': currentStock - (item.qty ?? 0)}).eq('id', item.itemId as Object);
+            double currentStock = double.tryParse(itemData['stock_quantity']?.toString() ?? '0') ?? 0.0;
+            await Supabase.instance.client.from('items').update({'stock_quantity': currentStock - (item.qty)}).eq('id', item.itemId as Object);
           }
         }
       }
@@ -369,7 +369,7 @@ class DataRepository {
   Future<int> insertSupplier(Supplier supplier) async {
     if (kIsWeb) {
       final response = await Supabase.instance.client.from('suppliers').insert(supplier.toMap()).select().single();
-      int id = response['id'];
+      int id = int.tryParse(response['id']?.toString() ?? '0') ?? 0;
       supplier.id = id;
       return id;
     }
@@ -417,15 +417,15 @@ class DataRepository {
   Future<int> createPurchase(PurchaseModel purchase) async {
     if (kIsWeb) {
       final response = await Supabase.instance.client.from('purchases').insert(purchase.toMap()).select().single();
-      int purchaseId = response['id'];
+      int purchaseId = int.tryParse(response['id']?.toString() ?? '0') ?? 0;
       if (purchase.items != null) {
         for (var item in purchase.items!) {
           item.purchaseId = purchaseId;
           await Supabase.instance.client.from('purchase_items').insert(item.toMap());
           if (item.itemId != null) {
             final itemData = await Supabase.instance.client.from('items').select('stock_quantity').eq('id', item.itemId as Object).single();
-            num currentStock = itemData['stock_quantity'] ?? 0;
-            await Supabase.instance.client.from('items').update({'stock_quantity': currentStock + (item.qty ?? 0)}).eq('id', item.itemId as Object);
+            double currentStock = double.tryParse(itemData['stock_quantity']?.toString() ?? '0') ?? 0.0;
+            await Supabase.instance.client.from('items').update({'stock_quantity': currentStock + (item.qty)}).eq('id', item.itemId as Object);
           }
         }
       }
@@ -466,7 +466,7 @@ class DataRepository {
   Future<int> insertExpense(ExpenseModel expense) async {
     if (kIsWeb) {
       final response = await Supabase.instance.client.from('expenses').insert(expense.toMap()).select().single();
-      int id = response['id'];
+      int id = int.tryParse(response['id']?.toString() ?? '0') ?? 0;
       expense.id = id;
       return id;
     }
