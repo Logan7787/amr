@@ -33,13 +33,18 @@ class LocalizationService extends ChangeNotifier {
   }
 
   Future<void> load() async {
-    String jsonString = await rootBundle.loadString(
-      'assets/i18n/${_locale.languageCode}.json',
-    );
-    Map<String, dynamic> jsonMap = json.decode(jsonString);
-    _localizedStrings = jsonMap.map(
-      (key, value) => MapEntry(key, value.toString()),
-    );
+    try {
+      String jsonString = await rootBundle.loadString(
+        'assets/i18n/${_locale.languageCode}.json',
+      );
+      Map<String, dynamic> jsonMap = json.decode(jsonString);
+      _localizedStrings = jsonMap.map(
+        (key, value) => MapEntry(key, value.toString()),
+      );
+    } catch (e) {
+      debugPrint('Error loading localization: $e');
+      _localizedStrings = {};
+    }
   }
 
   String translate(String key) {

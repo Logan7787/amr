@@ -44,12 +44,16 @@ class _TransactionScreenState extends State<TransactionScreen> {
     super.initState();
     Future.microtask(() {
       if (!mounted) return;
-      Provider.of<CustomerProvider>(context, listen: false).loadCustomers();
-      Provider.of<ItemProvider>(context, listen: false).loadItems();
-      Provider.of<TransactionProvider>(
-        context,
-        listen: false,
-      ).clearTransaction();
+      try {
+        Provider.of<CustomerProvider>(context, listen: false).loadCustomers();
+        Provider.of<ItemProvider>(context, listen: false).loadItems();
+        Provider.of<TransactionProvider>(
+          context,
+          listen: false,
+        ).clearTransaction();
+      } catch (e) {
+        debugPrint('Error in TransactionScreen initState: $e');
+      }
     });
   }
 
@@ -261,10 +265,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = Provider.of<LocalizationService>(context);
-    final customers = Provider.of<CustomerProvider>(context).customers;
-    final items = Provider.of<ItemProvider>(context).items;
-    final txnProvider = Provider.of<TransactionProvider>(context);
+    try {
+      final loc = Provider.of<LocalizationService>(context);
+      final customers = Provider.of<CustomerProvider>(context).customers;
+      final items = Provider.of<ItemProvider>(context).items;
+      final txnProvider = Provider.of<TransactionProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -550,5 +555,19 @@ class _TransactionScreenState extends State<TransactionScreen> {
         ),
       ),
     );
+    } catch (e) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Error')),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Screen Load Error: $e\n\nPlease check console for details.',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

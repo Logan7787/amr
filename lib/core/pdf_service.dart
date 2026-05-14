@@ -19,7 +19,12 @@ class PdfService {
     final pdf = pw.Document();
 
     // Load Tamil Font optimized for PDF shaping
-    final font = await TamilPdfFont.load();
+    pw.Font? font;
+    try {
+      font = await TamilPdfFont.load();
+    } catch (e) {
+      debugPrint('Error loading Tamil PDF Font: $e');
+    }
     final fontBold = font; // Use same font if bold is not explicitly provided by package
 
     final prefs = await SharedPreferences.getInstance();

@@ -15,8 +15,14 @@ import 'core/supabase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
-  await SupabaseService.init();
+  
+  try {
+    await dotenv.load(fileName: ".env");
+    await SupabaseService.init();
+  } catch (e) {
+    debugPrint('Initialization Error: $e');
+  }
+
   runApp(
     MultiProvider(
       providers: [

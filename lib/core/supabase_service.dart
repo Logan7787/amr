@@ -12,11 +12,22 @@ class SupabaseService {
   SupabaseService._internal();
 
   static Future<void> init() async {
-    final url = dotenv.env['SUPABASE_URL'] ?? '';
-    final anonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+    try {
+      final url = dotenv.env['SUPABASE_URL'] ?? '';
+      final anonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
 
-    if (url.isNotEmpty && anonKey.isNotEmpty) {
-      await Supabase.initialize(url: url, anonKey: anonKey);
+      if (url.isNotEmpty && anonKey.isNotEmpty) {
+        await Supabase.initialize(
+          url: url,
+          anonKey: anonKey,
+          debug: kDebugMode,
+        );
+        debugPrint('Supabase initialized successfully');
+      } else {
+        debugPrint('Supabase URL or Anon Key is missing in .env');
+      }
+    } catch (e) {
+      debugPrint('Failed to initialize Supabase: $e');
     }
   }
 
